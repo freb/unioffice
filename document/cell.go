@@ -60,6 +60,11 @@ func (c Cell) Paragraphs() []Paragraph {
 			for _, p := range cbc.P {
 				ret = append(ret, Paragraph{c.d, p})
 			}
+			if cbc.Sdt != nil && cbc.Sdt.SdtContent != nil {
+				for _, p := range cbc.Sdt.SdtContent.P {
+					ret = append(ret, Paragraph{c.d, p})
+				}
+			}
 		}
 	}
 	return ret
