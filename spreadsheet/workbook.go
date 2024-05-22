@@ -335,6 +335,11 @@ func (wb *Workbook) Save(w io.Writer) error {
 	}
 	for i, sheet := range wb.xws {
 		// recalculate sheet dimensions
+		// Dimension is missing from Google Sheets
+		if sheet.Dimension == nil {
+			sheet.Dimension = sml.NewCT_SheetDimension()
+		}
+		sheet.Dimension.RefAttr = Sheet{wb, nil, sheet}.Extents()
 		sheet.Dimension.RefAttr = Sheet{wb, nil, sheet}.Extents()
 
 		fn := unioffice.AbsoluteFilename(dt, unioffice.WorksheetType, i+1)
