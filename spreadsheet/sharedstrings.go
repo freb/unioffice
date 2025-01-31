@@ -8,6 +8,7 @@ package spreadsheet
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/unidoc/unioffice"
 	"github.com/unidoc/unioffice/schema/soo/sml"
@@ -51,12 +52,23 @@ func (s SharedStrings) GetString(id int) (string, error) {
 	if id < 0 {
 		return "", fmt.Errorf("invalid string index %d, must be > 0", id)
 	}
-	if id > len(s.x.Si) {
+	if id >= len(s.x.Si) { // Use >= instead of > to prevent out-of-bounds panic
 		return "", fmt.Errorf("invalid string index %d, table only has %d values", id, len(s.x.Si))
 	}
 	si := s.x.Si[id]
+	// If si.T is present, return the plain text directly
 	if si.T != nil {
 		return *si.T, nil
 	}
+	// If si.R exists, concatenate all rich text runs
+	if len(si.R) > 0 {
+		var sb strings.Builder
+		for _, r := range si.R {
+			sb.WriteString(r.T)
+		}
+		return sb.String(), nil
+	}
+
+	// No valid text found
 	return "", nil
 }
