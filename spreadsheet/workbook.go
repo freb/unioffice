@@ -784,3 +784,8 @@ func (wb *Workbook) RemoveCalcChain() {
 func (wb *Workbook) GetFilename() string {
 	return wb.filename
 }
+
+// Themes returns the theme relationships added during file open.
+func (wb *Workbook) Themes() []*dml.Theme {
+	return wb.themes
+}
