@@ -65,7 +65,7 @@ func SetLegacyLicenseKey(s string) error {
 	}
 	// check signature
 	if err := l.Verify(legacyPubKey); err != nil {
-		return errors.New("license validatin error")
+		return fmt.Errorf("license validation error: %w", err)
 	}
 
 	if l.Expiration.Before(common.ReleasedAt) {
