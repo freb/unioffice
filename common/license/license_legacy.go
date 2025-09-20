@@ -63,7 +63,7 @@ func (l LegacyLicense) Verify(pubKey *rsa.PublicKey) error {
 	hashed := sha256.Sum256(buf.Bytes())
 	err = rsa.VerifyPKCS1v15(pubKey, crypto.SHA256, hashed[:], sig)
 	if err != nil && strings.Contains(err.Error(), "512-bit keys are insecure") {
-		return fmt.Errorf("512-bit keys are not supported in Go 1.24, compile with GODEBUG=rsa1024min=0")
+		return fmt.Errorf("512-bit keys are not supported in Go 1.24, add '//go:debug rsa1024min=0' to a source file")
 	}
 	return err
 }
