@@ -51,7 +51,11 @@ func (m *ST_OnOff) ValidateWithPath(path string) error {
 
 func (m ST_OnOff) String() string {
 	if m.Bool != nil {
-		return fmt.Sprintf("%v", *m.Bool)
+		// Word stores on/off attributes as "1"/"0". fmt.Sprintf("%v", bool)
+		// emits "true"/"false", which drops custom table styles from the
+		// gallery (w:customStyle) and prevents tblLook conditional formatting
+		// from attaching.
+		return fmt.Sprintf("%d", b2i(*m.Bool))
 	}
 	if m.ST_OnOff1 != ST_OnOff1Unset {
 		return m.ST_OnOff1.String()
